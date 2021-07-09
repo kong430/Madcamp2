@@ -51,7 +51,8 @@
         android:id="@+id/pickImgBtn"
         app:tint="@color/design_default_color_primary"
         android:layout_toRightOf="@+id/messageEdit"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
 
 
 </RelativeLayout>
