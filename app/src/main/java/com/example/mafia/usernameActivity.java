@@ -9,7 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.EditText;
 
-public class LoginActivity extends AppCompatActivity {
+public class usernameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
