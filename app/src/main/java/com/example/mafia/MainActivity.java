@@ -15,19 +15,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 10);
-        }
-
-        EditText editText = findViewById(R.id.editText);
-
-        findViewById(R.id.enterBtn).setOnClickListener(v -> {
-
-            Intent intent = new Intent(this, ChatActivity.class);
-            intent.putExtra("name", editText.getText().toString());
-            startActivity(intent);
-
-        });
     }
 }
