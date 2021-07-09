@@ -2,6 +2,7 @@ package com.example.mafia;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,9 +23,7 @@ import kotlin.jvm.functions.Function2;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    private View loginButton, logoutButton;
-    private TextView nickName;
-    private ImageView profileImage;
+    private View loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,18 +31,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         loginButton = findViewById(R.id.login);
-        logoutButton = findViewById(R.id.logout);
-        nickName = findViewById(R.id.nickname);
-        profileImage = findViewById(R.id.profile);
+
+
 
         //결과에 대한 처리. 로그인 버튼/프로필 사진 보임 or 숨김
-        Function2<OAuthToken, Throwable, Unit> callback = new  Function2<OAuthToken, Throwable, Unit>() {
+        Function2<OAuthToken, Throwable, Unit> callback = new Function2<OAuthToken, Throwable, Unit>() {
             @Override
             public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
-                if (oAuthToken != null)  {
-                    return null;
+                Log.d("invoke test", "invoke ok");
+                if (oAuthToken != null) {
+
                 }
-                if (throwable != null){
+                if (throwable != null) {
 
                 }
                 updateKakaoLoginUi();
@@ -51,40 +50,26 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        loginButton.setOnClickListener(new View.OnClickListener(){
-           @Override
-           public void onClick(View v) {
-               if (LoginClient.getInstance().isKakaoTalkLoginAvailable(MainActivity.this)){
-                   LoginClient.getInstance().loginWithKakaoAccount(MainActivity.this, callback);
-               }
-               else{
-                   //웹페이지
-                    LoginClient.getInstance().loginWithKakaoAccount(MainActivity.this, callback);
-               }
-           }
-       });
-
-        logoutButton.setOnClickListener(new View.OnClickListener(){
-
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
-                    @Override
-                    public Unit invoke(Throwable throwable) {
-                        updateKakaoLoginUi();
-                        return null;
-                    }
-                });
+                Log.d("invoke test", "clicked");
+                if (LoginClient.getInstance().isKakaoTalkLoginAvailable(MainActivity.this)) {
+                    LoginClient.getInstance().loginWithKakaoAccount(MainActivity.this, callback);
+                } else {
+                    //웹페이지
+                    LoginClient.getInstance().loginWithKakaoAccount(MainActivity.this, callback);
+                }
             }
         });
-
-        updateKakaoLoginUi();
     }
 
     private void updateKakaoLoginUi() {
+        Log.d("invoke test", "ui");
         UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
             @Override
             public Unit invoke(User user, Throwable throwable) {
+                Log.d("invoke test", "update");
                 if (user != null) {
                     Log.i(TAG, "invoke: id=" + user.getId());
                     Log.i(TAG, "invoke: email=" + user.getKakaoAccount().getEmail());
@@ -92,17 +77,12 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "invoke: gender=" + user.getKakaoAccount().getGender());
                     Log.i(TAG, "invoke: age=" + user.getKakaoAccount().getAgeRange());
 
-
-                    nickName.setText(user.getKakaoAccount().getProfile().getNickname());
-                    Glide.with(profileImage).load(user.getKakaoAccount().getProfile().getThumbnailImageUrl()).circleCrop().into(profileImage);
-
-                    loginButton.setVisibility(View.GONE);
-                    logoutButton.setVisibility(View.VISIBLE);
-                } else {
-                    nickName.setText(null);
-                    profileImage.setImageBitmap(null);
-                    loginButton.setVisibility(View.VISIBLE);
-                    logoutButton.setVisibility(View.GONE);
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.putExtra("user_id", user.getId());
+                    intent.putExtra("user_nickname", user.getKakaoAccount().getProfile().getNickname());
+                    intent.putExtra("user_image", user.getKakaoAccount().getProfile().getThumbnailImageUrl());
+                    startActivity(intent);
+                    finish();
                 }
                 return null;
             }
