@@ -47,7 +47,7 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         
-        name = getIntent().getStringExtra("name");
+        name = getIntent().getStringExtra("user_nickname");
         initiateSocketConnection();
     }
 

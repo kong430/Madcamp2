@@ -28,6 +28,7 @@ public class LoginActivity extends Activity {
     private TextView nickName;
     private ImageView profileImage;
     private View logoutButton;
+    private View enterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class LoginActivity extends Activity {
         nickName = findViewById(R.id.nickname);
         profileImage = findViewById(R.id.profile);
         logoutButton = findViewById(R.id.logout);
+        enterButton = findViewById(R.id.enter);
 
         Intent intent = getIntent();
         String user_id = intent.getStringExtra("user_id");
@@ -59,7 +61,19 @@ public class LoginActivity extends Activity {
                 });
             }
         });
+
+        enterButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
+                intent.putExtra("user_nickname", user_nickname);
+                startActivity(intent);
+                //finish();
+            }
+        });
     }
+
     private void updateKakaoLogoutUi() {
         UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
             @Override
