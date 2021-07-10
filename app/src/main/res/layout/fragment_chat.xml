@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
     tools:context=".ChatActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -12,49 +11,50 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_above="@+id/messageEdit"
-        android:background="#8BFFFFFF"
+        android:background="#00FFFFFF"
         android:backgroundTint="#88BEE5EA" />
 
     <EditText
-        android:id="@+id/messageEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/edittext_design"
+        android:padding="8dp"
+        android:hint="Message..."
+        android:textSize="16sp"
+        android:layout_toStartOf="@+id/sendBtn"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginBottom="16dp"
-        android:layout_toStartOf="@+id/sendBtn"
-        android:layout_toLeftOf="@+id/sendBtn"
-        android:background="@drawable/edittext_design"
-        android:hint="Message..."
-        android:padding="8dp"
-        android:textSize="16sp" />
+        android:id="@+id/messageEdit"
+        android:layout_marginLeft="16dp"
+        android:layout_toLeftOf="@+id/sendBtn" />
 
     <TextView
-        android:id="@+id/sendBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:padding="10dp"
         android:text="Send"
+        android:padding="10dp"
+        android:visibility="invisible"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="16dp"
+        android:id="@+id/sendBtn"
         android:textColor="@color/design_default_color_primary"
-        android:visibility="invisible" />
+        android:layout_alignParentRight="true" />
 
     <ImageView
-        android:id="@+id/pickImgBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:layout_toEndOf="@+id/messageEdit"
-        android:layout_toRightOf="@+id/messageEdit"
-        android:padding="8dp"
         android:src="@drawable/ic_baseline_image_24"
-        app:tint="@color/design_default_color_primary" />
+        android:padding="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/messageEdit"
+        android:layout_marginBottom="16dp"
+        android:id="@+id/pickImgBtn"
+        app:tint="@color/design_default_color_primary"
+        android:layout_toRightOf="@+id/messageEdit"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
+
 
 </RelativeLayout>

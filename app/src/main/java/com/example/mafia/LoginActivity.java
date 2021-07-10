@@ -23,12 +23,13 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity {
 
     private TextView nickName;
     private ImageView profileImage;
     private View logoutButton;
     private View enterButton;
+    static String user_nickname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +42,12 @@ public class LoginActivity extends Activity {
         enterButton = findViewById(R.id.enter);
 
         Intent intent = getIntent();
-        String user_id = intent.getStringExtra("user_id");
-        String user_nickname = intent.getStringExtra("user_nickname");
-        Uri user_profile = intent.getParcelableExtra("user_image");
+        Long user_id = intent.getLongExtra("user_id", 0);
+        user_nickname = intent.getStringExtra("user_nickname");
+        //Uri user_profile = intent.getParcelableExtra("user_image");
 
         nickName.setText(user_nickname);
-        Glide.with(profileImage).load(user_profile).circleCrop().into(profileImage);
+        //Glide.with(profileImage).load(user_profile).circleCrop().into(profileImage);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
 
@@ -65,7 +66,7 @@ public class LoginActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RoomActivity.class);
                 intent.putExtra("user_nickname", user_nickname);
                 startActivity(intent);
                 //finish();
