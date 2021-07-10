@@ -2,11 +2,18 @@ package com.example.mafia;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +30,10 @@ public class fragment_bar extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private TextView word;
+    private TextView leftTime;
+    private TextView score;
 
     public fragment_bar() {
         // Required empty public constructor
@@ -59,6 +70,25 @@ public class fragment_bar extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bar, container, false);
+        View v = inflater.inflate(R.layout.fragment_bar, container, false);
+        word = v.findViewById(R.id.word);
+        leftTime = v.findViewById(R.id.leftTime);
+        score = v.findViewById(R.id.score);
+
+        score.setText("현재 점수 : " + 0);
+
+        CountDownTimer timer = new CountDownTimer(30000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                leftTime.setText("남은 시간 : " + (int) (millisUntilFinished/1000));
+            }
+
+            @Override
+            public void onFinish() {
+            }
+        };
+        timer.start();
+        return v;
     }
+
 }

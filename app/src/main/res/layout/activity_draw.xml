@@ -10,16 +10,17 @@
         android:id="@+id/fb_eraser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_floating_background"
-        android:elevation="8dp"
         android:layout_marginBottom="15dp"
+        android:background="@drawable/ic_floating_background"
+        android:backgroundTint="#C8D1D8"
+        android:elevation="8dp"
         android:src="@drawable/ic_eraser"
+        app:backgroundTint="#C8D1D8"
         app:fabSize="mini"
         app:layout_constraintBottom_toTopOf="@id/fb_pen"
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_bias="0.76" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fb_clear"
@@ -27,8 +28,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:background="@drawable/ic_floating_background"
+        android:backgroundTint="#C8D1D8"
         android:elevation="8dp"
         android:src="@drawable/ic_clean"
+        app:backgroundTint="#C8D1D8"
         app:fabSize="mini"
         app:layout_constraintBottom_toTopOf="@+id/fb_eraser"
         app:layout_constraintHorizontal_bias="0.903"
@@ -40,15 +43,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_floating_background"
+        android:backgroundTint="#C8D1D8"
         android:elevation="8dp"
         android:src="@drawable/ic_pen"
+        app:backgroundTint="#C8D1D8"
         app:fabSize="mini"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9"
-        app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
