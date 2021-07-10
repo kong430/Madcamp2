@@ -3,6 +3,7 @@ package com.example.mafia;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,6 +151,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
                     SentMessageHolder messageHolder = (SentMessageHolder) holder;
                     messageHolder.messageTxt.setText(message.getString("message"));
+                    Log.d("message Test sent", message.getString("message"));
 
                 } else {
 
@@ -163,10 +165,11 @@ public class MessageAdapter extends RecyclerView.Adapter {
             } else {
 
                 if (message.has("message")) {
-
+                    Log.d("message Test received", message.getString("message"));
                     ReceivedMessageHolder messageHolder = (ReceivedMessageHolder) holder;
                     messageHolder.nameTxt.setText(message.getString("name"));
                     messageHolder.messageTxt.setText(message.getString("message"));
+
 
                 } else {
 

@@ -7,10 +7,12 @@
     tools:context=".ChatActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/recyclerView"
-        android:layout_above="@+id/messageEdit"/>
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_above="@+id/messageEdit"
+        android:background="#8BFFFFFF"
+        android:backgroundTint="#88BEE5EA" />
 
     <EditText
         android:layout_width="match_parent"

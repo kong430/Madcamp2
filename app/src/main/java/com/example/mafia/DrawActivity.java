@@ -1,22 +1,36 @@
 package com.example.mafia;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class CanvasActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class DrawActivity extends AppCompatActivity {
     private DrawCanvas drawCanvas;
+
     private FloatingActionButton fbPen;             //펜 모드 버튼
     private FloatingActionButton fbEraser;          //지우개 모드 버튼
-    private FloatingActionButton fbSave;            //그림 저장 버튼
-    private FloatingActionButton fbOpen;            //그림 호출 버튼
+    private FloatingActionButton fbClear;
     private ConstraintLayout canvasContainer;       //캔버스 root view
+
+    private ArrayList<Pen> drawCommandList;         //그리기 경로 기록
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +49,7 @@ public class CanvasActivity extends AppCompatActivity {
         canvasContainer = findViewById(R.id.lo_canvas);
         fbPen = findViewById(R.id.fb_pen);
         fbEraser = findViewById(R.id.fb_eraser);
-        fbSave = findViewById(R.id.fb_save);
-        fbOpen = findViewById(R.id.fb_open);
+        fbClear = findViewById(R.id.fb_clear);
         drawCanvas = new DrawCanvas(this);
     }
 
@@ -53,15 +66,8 @@ public class CanvasActivity extends AppCompatActivity {
             drawCanvas.changeTool(DrawCanvas.MODE_ERASER);
         });
 
-        fbSave.setOnClickListener((v)->{
-            drawCanvas.invalidate();
-            Bitmap saveBitmap = drawCanvas.getCurrentCanvas();
-            CanvasIO.saveBitmap(this, saveBitmap);
-        });
-
-        fbOpen.setOnClickListener((v)->{
-            drawCanvas.init();
-            drawCanvas.loadDrawImage = CanvasIO.openBitmap(this);
+        fbClear.setOnClickListener((v)->{
+            drawCommandList.clear();
             drawCanvas.invalidate();
         });
     }
@@ -70,7 +76,7 @@ public class CanvasActivity extends AppCompatActivity {
      * jhChoi - 201124
      * Pen을 표현할 class입니다.
      */
-    class Pen {
+    static class Pen {
         public static final int STATE_START = 0;        //펜의 상태(움직임 시작)
         public static final int STATE_MOVE = 1;         //펜의 상태(움직이는 중)
         float x, y;                                     //펜의 좌표
@@ -105,13 +111,12 @@ public class CanvasActivity extends AppCompatActivity {
         final int PEN_SIZE = 3;                                   //펜 사이즈
         final int ERASER_SIZE = 30;                               //지우개 사이즈
 
-        ArrayList<Pen> drawCommandList;                           //그리기 경로가 기록된 리스트
         Paint paint;                                              //펜
         Bitmap loadDrawImage;                                     //호출된 이전 그림
         int color;                                                //현재 펜 색상
         int size;                                                 //현재 펜 크기
 
-        public DrawCanvas(Context context) {
+        public DrawCanvas(DrawActivity context) {
             super(context);
             init();
         }
@@ -126,10 +131,7 @@ public class CanvasActivity extends AppCompatActivity {
             init();
         }
 
-        /**
-         * jhChoi - 201124
-         * 그리기에 필요한 요소를 초기화 합니다.
-         */
+         //그리기에 필요한 요소를 초기화 합니다.
         private void init() {
             paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             drawCommandList = new ArrayList<>();
@@ -138,10 +140,8 @@ public class CanvasActivity extends AppCompatActivity {
             size = PEN_SIZE;
         }
 
-        /**
-         * jhChoi - 201124
-         * 현재까지 그린 그림을 Bitmap으로 반환합니다.
-         */
+
+        //현재까지 그린 그림을 Bitmap으로 반환합니다.
         public Bitmap getCurrentCanvas() {
             Bitmap bitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
@@ -153,7 +153,7 @@ public class CanvasActivity extends AppCompatActivity {
          * jhChoi - 201124
          * Tool type을 (펜 or 지우개)로 변경합니다.
          * */
-        private void changeTool(int toolMode) {
+        void changeTool(int toolMode) {
             if (toolMode == MODE_PEN) {
                 this.color = Color.BLACK;
                 size = PEN_SIZE;
@@ -193,5 +193,4 @@ public class CanvasActivity extends AppCompatActivity {
             return true;
         }
     }
-}
 }
