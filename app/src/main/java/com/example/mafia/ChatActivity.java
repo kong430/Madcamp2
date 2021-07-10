@@ -32,7 +32,6 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 public class ChatActivity extends AppCompatActivity implements TextWatcher {
-
     private String name;
     private WebSocket webSocket;
     private String SERVER_PATH = "ws://192.249.18.146:443";

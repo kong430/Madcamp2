@@ -18,5 +18,4 @@
         android:text="Hello this is a sample message!"
         android:layout_marginLeft="64dp" />
 
-
 </RelativeLayout>

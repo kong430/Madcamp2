@@ -27,8 +27,4 @@
         android:background="@color/design_default_color_primary_dark"
         android:id="@+id/enterBtn"/>
 
-
-
-
-
 </RelativeLayout>

@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void updateKakaoLoginUi() {
         Log.d("invoke test", "ui");
         UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {

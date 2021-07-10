@@ -61,7 +61,6 @@ public class LoginActivity extends Activity {
                 });
             }
         });
-
         enterButton.setOnClickListener(new View.OnClickListener(){
 
             @Override

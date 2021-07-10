@@ -14,5 +14,4 @@
         android:src="@drawable/ic_launcher_background"
         android:layout_alignParentRight="true"
         android:layout_marginRight="8dp" />
-
 </RelativeLayout>

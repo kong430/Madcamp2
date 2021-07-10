@@ -157,7 +157,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     Bitmap bitmap = getBitmapFromString(message.getString("image"));
 
                     imageHolder.imageView.setImageBitmap(bitmap);
-
                 }
 
             } else {
