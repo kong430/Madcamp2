@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -55,6 +56,8 @@ public class fragment_draw extends Fragment {
     private ArrayList<fragment_draw.Pen> drawCommandList;         //그리기 경로 기록
     View v;
 
+    private Button button;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -89,6 +92,9 @@ public class fragment_draw extends Fragment {
         v = inflater.inflate(R.layout.fragment_draw, container, false);
         findId();
         canvasContainer.addView(drawCanvas);
+
+        button = v.findViewById(R.id.button);
+
         setOnClickListener();
         return v;
     }

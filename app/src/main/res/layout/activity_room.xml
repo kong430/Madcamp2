@@ -7,17 +7,10 @@
     tools:context="com.example.mafia.RoomActivity">
 
     <fragment
-        android:id="@+id/barFrag"
-        android:name="com.example.mafia.fragment_bar"
-        android:layout_width="match_parent"
-        android:layout_height="102dp"
-        android:layout_weight="25" />
-
-    <fragment
         android:id="@+id/drawFrag"
         android:name="com.example.mafia.fragment_draw"
         android:layout_width="match_parent"
-        android:layout_height="419dp"
+        android:layout_height="336dp"
         android:layout_weight="25" />
 
     <fragment

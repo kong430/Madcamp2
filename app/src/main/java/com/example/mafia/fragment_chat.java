@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -62,6 +63,10 @@ public class fragment_chat extends Fragment implements TextWatcher {
     private int IMAGE_REQUEST_ID = 1;
     private MessageAdapter messageAdapter;
     View v;
+
+    private TextView word;
+    private TextView leftTime;
+    private TextView score;
 
     public fragment_chat() {
         // Required empty public constructor
