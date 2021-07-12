@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,6 +32,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
+
 
 import static android.app.Activity.RESULT_OK;
 
@@ -187,19 +187,18 @@ public class fragment_chat extends Fragment implements TextWatcher {
 
         }
 
+
         @Override
         public void onMessage(WebSocket webSocket, String text){
             super.onMessage(webSocket, text);
-
             ((RoomActivity) getContext()).runOnUiThread(() -> {
                 try {
+                    Log.d("messagetest", text);
                     JSONObject jsonObject = new JSONObject(text);
                     jsonObject.put("isSent", false);
                     Log.d("isSent", "ok");
+                    if (jsonObject.has("message")) messageAdapter.addItem(jsonObject);
 
-                    messageAdapter.addItem(jsonObject);
-
-                    recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

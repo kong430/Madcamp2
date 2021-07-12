@@ -91,14 +91,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
                 if (message.has("message"))
                     return TYPE_MESSAGE_SENT;
-                else
+                else if (message.has("image"))
                     return TYPE_IMAGE_SENT;
 
             } else {
 
                 if (message.has("message"))
                     return TYPE_MESSAGE_RECEIVED;
-                else
+                else if (message.has("image"))
                     return TYPE_IMAGE_RECEIVED;
 
             }
@@ -114,6 +114,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view;
+        Log.d("viewType", String.valueOf(viewType));
 
         switch (viewType) {
             case TYPE_MESSAGE_SENT:
