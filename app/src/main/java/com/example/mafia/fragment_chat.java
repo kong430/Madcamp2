@@ -130,7 +130,9 @@ public class fragment_chat extends Fragment implements TextWatcher {
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(SERVER_PATH).build();
+        Log.d("request", String.valueOf(request));
         webSocket = client.newWebSocket(request, new SocketListener());
+        Log.d("request...", String.valueOf(webSocket));
 
     }
 
