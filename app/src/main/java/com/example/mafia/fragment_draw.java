@@ -175,100 +175,14 @@ public class fragment_draw extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                /**if (is_received == 1) {
-                    if (received_json.has("first canvas")) {
-                        try {
-                            received_prevP = new Pen(received_json.getDouble("x"), received_json.getDouble("y"),
-                                    received_json.getInt("color"), received_json.getInt("moveStatus"), received_json.getInt("size"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        try {
-                            Log.d("testtesttest222", String.valueOf(received_json.getInt("color")));
-                            received_drawCL = new Pen(received_json.getDouble("x"), received_json.getDouble("y"),
-                                    received_json.getInt("moveStatus"), received_json.getInt("color"), received_json.getInt("size"));
-                            Log.d("testtesttest", String.valueOf(received_drawCL.color));
-                            paint_tmp.setColor(received_drawCL.color);
-                            paint_tmp.setStrokeWidth(received_drawCL.size);
-                            canvas.drawLine((float) received_prevP.x, (float) received_prevP.y, (float) received_drawCL.x, (float) received_prevP.y, paint_tmp);
-
-                            received_prevP = received_drawCL;
-                            received_prevP = received_drawCL;
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }*/
-
-
             });
         }
-
-        /**@Override
-        public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
-            super.onMessage(webSocket, bytes);
-            ((RoomActivity) getContext()).runOnUiThread(() -> {
-                Log.d("testtest", String.valueOf(bytes));
-                JSONObject jsonObject = new JSONObject((Map) bytes);
-                Log.d("testtest", String.valueOf(jsonObject));
-                //JSONObject jsonObject = new JSONObject(bytes);
-                //jsonObject.put("isSent", false);
-                Log.d("isSent", "ok");
-                jsonObject.has
-
-            });
-        }*/
-
 
     }
 
     private void initializeView() {
-
-        //canvasAdapter = new CanvasAdapter(getLayoutInflater());
-        /*button.setOnClickListener(v -> {
-
-            JSONObject jsonObject = new JSONObject();
-            try {
-
-
-                /**Bitmap bitmap = drawCanvas.getCurrentCanvas();
-
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream .toByteArray();
-                Log.d("byte test", String.valueOf(byteArray));
-
-                jsonObject.put("canvas", ByteString.of(byteArray));
-
-                webSocket.send(jsonObject.toString());
-                CanvasIO.saveBitmap(v.getContext(), bitmap);
-
-                jsonObject.put("isSent", true);
-                jsonObject.put("canvas", drawCommandList);
-                drawCanvas.loadDrawImage = drawCanvas.getCurrentCanvas();
-                String tmp = BitmapToString(drawCanvas.loadDrawImage);
-                jsonObject.put("canvas", tmp);
-                webSocket.send(jsonObject.toString());
-
-                jsonObject.put("isSent", true);
-                jsonObject.put("canvas", drawCommandList);
-
-                webSocket.send(jsonObject.toString());
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });*/
-
     }
 
-    /**
-     * jhChoi - 201124
-     * OnClickListener Setting
-     */
     private void setOnClickListener() {
         fbPen.setOnClickListener((v)->{
             drawCanvas.changeTool(fragment_draw.DrawCanvas.MODE_PEN);
@@ -284,25 +198,8 @@ public class fragment_draw extends Fragment {
             drawCanvas.invalidate();
         });
 
-        /**button.setOnClickListener(v -> {
-
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("canvas", drawCanvas.getCurrentCanvas());
-                webSocket.send(jsonObject.toString());
-
-                jsonObject.put("isSent", true);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });*/
     }
 
-    /**
-     * jhChoi - 201124
-     * Pen을 표현할 class입니다.
-     */
     class Pen {
         public static final int STATE_START = 0;        //펜의 상태(움직임 시작)
         public static final int STATE_MOVE = 1;         //펜의 상태(움직이는 중)
@@ -319,19 +216,12 @@ public class fragment_draw extends Fragment {
             this.size = size;
         }
 
-        /**
-         * jhChoi - 201124
-         * 현재 pen의 상태가 움직이는 상태인지 반환합니다.
-         */
         public boolean isMove() {
             return moveStatus == STATE_MOVE;
         }
     }
 
-    /**
-     * jhChoi - 201124
-     * 그림이 그려질 canvas view
-     */
+
     class DrawCanvas extends View {
         public static final int MODE_PEN = 1;                     //모드 (펜)
         public static final int MODE_ERASER = 0;                  //모드 (지우개)
@@ -358,10 +248,7 @@ public class fragment_draw extends Fragment {
             init();
         }
 
-        /**
-         * jhChoi - 201124
-         * 그리기에 필요한 요소를 초기화 합니다.
-         */
+
         private void init() {
             paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             drawCommandList = new ArrayList<>();
@@ -370,10 +257,6 @@ public class fragment_draw extends Fragment {
             size = PEN_SIZE;
         }
 
-        /**
-         * jhChoi - 201124
-         * 현재까지 그린 그림을 Bitmap으로 반환합니다.
-         */
         public Bitmap getCurrentCanvas() {
             Bitmap bitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
@@ -381,10 +264,7 @@ public class fragment_draw extends Fragment {
             return bitmap;
         }
 
-        /**
-         * jhChoi - 201124
-         * Tool type을 (펜 or 지우개)로 변경합니다.
-         */
+
         private void changeTool(int toolMode) {
             if (toolMode == MODE_PEN) {
                 this.color = Color.BLACK;
@@ -431,19 +311,6 @@ public class fragment_draw extends Fragment {
                         fragment_draw.Pen prevP = drawCommandList.get(i - 1);
                         canvas.drawLine((float) prevP.x, (float) prevP.y, (float) p.x, (float) p.y, paint);
 
-                        /**try {
-                         if (i == 0) jsonObject.put("first canvas", 1);
-                         jsonObject.put("color", p.color);
-                         jsonObject.put("moveStatus", p.moveStatus);
-                         jsonObject.put("size", p.size);
-                         jsonObject.put("x", p.x);
-                         jsonObject.put("y", p.y);
-
-                         } catch (JSONException e) {
-                         e.printStackTrace();
-                         }
-                         webSocket.send(jsonObject.toString());
-                         Log.d("json Test", String.valueOf(i));*/
                     }
                 }
             }
