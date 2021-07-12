@@ -2,18 +2,13 @@ package com.example.mafia;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,9 +66,9 @@ public class fragment_bar extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_bar, container, false);
-        word = v.findViewById(R.id.word);
-        leftTime = v.findViewById(R.id.leftTime);
-        score = v.findViewById(R.id.score);
+        word = v.findViewById(R.id.word_);
+        leftTime = v.findViewById(R.id.leftTime_);
+        score = v.findViewById(R.id.score_);
 
         score.setText("현재 점수 : " + 0);
 

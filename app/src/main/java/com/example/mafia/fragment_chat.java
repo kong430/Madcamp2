@@ -1,7 +1,6 @@
 package com.example.mafia;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -24,11 +24,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.logging.SocketHandler;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -106,6 +104,24 @@ public class fragment_chat extends Fragment implements TextWatcher {
         v = inflater.inflate(R.layout.fragment_chat, container, false);
         name = LoginActivity.user_nickname;
         initiateSocketConnection();
+
+        word = v.findViewById(R.id.word);
+        leftTime = v.findViewById(R.id.leftTime);
+        score = v.findViewById(R.id.score);
+
+        score.setText("현재 점수 : " + 0);
+
+        CountDownTimer timer = new CountDownTimer(30000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                leftTime.setText("남은 시간 : " + (int) (millisUntilFinished/1000));
+            }
+
+            @Override
+            public void onFinish() {
+            }
+        };
+        timer.start();
 
         return v;
     }
