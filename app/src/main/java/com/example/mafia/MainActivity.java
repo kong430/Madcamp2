@@ -37,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         getHashKey();
 
+
         loginButton = findViewById(R.id.login);
-
-
 
         //결과에 대한 처리. 로그인 버튼/프로필 사진 보임 or 숨김
         Function2<OAuthToken, Throwable, Unit> callback = new Function2<OAuthToken, Throwable, Unit>() {
