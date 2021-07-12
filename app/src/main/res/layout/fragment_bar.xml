@@ -7,16 +7,26 @@
     tools:context=".fragment_bar">
 
     <TextView
-        android:id="@+id/word"
+        android:id="@+id/score_"
+        android:layout_width="74dp"
+        android:layout_height="34dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="27dp"
+        android:text="Text" />
+
+    <TextView
+        android:id="@+id/word_"
         android:layout_width="163dp"
         android:layout_height="60dp"
 
         android:layout_alignParentTop="true"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="19dp"
-        android:layout_toStartOf="@+id/leftTime"
-        android:layout_toEndOf="@+id/score"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="20dp"
+        android:layout_toStartOf="@+id/leftTime_"
+        android:layout_toEndOf="@+id/score_"
         android:background="@drawable/edittext_design"
         android:backgroundTint="#4CA9D5"
         android:gravity="center_horizontal"
@@ -25,24 +35,14 @@
         android:textSize="34sp" />
 
     <TextView
-        android:id="@+id/leftTime"
+        android:id="@+id/leftTime_"
         android:layout_width="82dp"
         android:layout_height="31dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="21dp"
         android:text="Text"
         android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/score"
-        android:layout_width="74dp"
-        android:layout_height="34dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="29dp"
-        android:text="Text" />
 
 </RelativeLayout>

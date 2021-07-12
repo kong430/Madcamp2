@@ -1,7 +1,6 @@
 package com.example.mafia;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -18,22 +18,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.logging.SocketHandler;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
+
 
 import static android.app.Activity.RESULT_OK;
 
@@ -62,6 +61,10 @@ public class fragment_chat extends Fragment implements TextWatcher {
     private int IMAGE_REQUEST_ID = 1;
     private MessageAdapter messageAdapter;
     View v;
+
+    private TextView word;
+    private TextView leftTime;
+    private TextView score;
 
     public fragment_chat() {
         // Required empty public constructor
@@ -102,6 +105,24 @@ public class fragment_chat extends Fragment implements TextWatcher {
         name = LoginActivity.user_nickname;
         initiateSocketConnection();
 
+        word = v.findViewById(R.id.word);
+        leftTime = v.findViewById(R.id.leftTime);
+        score = v.findViewById(R.id.score);
+
+        score.setText("현재 점수 : " + 0);
+
+        CountDownTimer timer = new CountDownTimer(30000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                leftTime.setText("남은 시간 : " + (int) (millisUntilFinished/1000));
+            }
+
+            @Override
+            public void onFinish() {
+            }
+        };
+        timer.start();
+
         return v;
     }
 
@@ -109,7 +130,9 @@ public class fragment_chat extends Fragment implements TextWatcher {
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(SERVER_PATH).build();
+        Log.d("request", String.valueOf(request));
         webSocket = client.newWebSocket(request, new SocketListener());
+        Log.d("request...", String.valueOf(webSocket));
 
     }
 
@@ -164,19 +187,18 @@ public class fragment_chat extends Fragment implements TextWatcher {
 
         }
 
+
         @Override
         public void onMessage(WebSocket webSocket, String text){
             super.onMessage(webSocket, text);
-
             ((RoomActivity) getContext()).runOnUiThread(() -> {
                 try {
+                    Log.d("messagetest", text);
                     JSONObject jsonObject = new JSONObject(text);
                     jsonObject.put("isSent", false);
                     Log.d("isSent", "ok");
+                    if (jsonObject.has("message")) messageAdapter.addItem(jsonObject);
 
-                    messageAdapter.addItem(jsonObject);
-
-                    recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
