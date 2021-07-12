@@ -63,6 +63,7 @@ public class fragment_draw extends Fragment {
     private ConstraintLayout canvasContainer;       //캔버스 root view
 
     private ArrayList<fragment_draw.Pen> drawCommandList;         //그리기 경로 기록
+    private ArrayList<fragment_draw.Pen> received_List = new ArrayList<>();
     View v;
 
     private Button button;
@@ -166,11 +167,41 @@ public class fragment_draw extends Fragment {
                 received_json = null;
                 try {
                     received_json = new JSONObject(text);
+                    received_List.add(new Pen(received_json.getDouble("x"), received_json.getDouble("y"),
+                            received_json.getInt("moveStatus"), received_json.getInt("color"),  received_json.getInt("size")));
+
                     is_received = 1;
                     drawCanvas.invalidate();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                /**if (is_received == 1) {
+                    if (received_json.has("first canvas")) {
+                        try {
+                            received_prevP = new Pen(received_json.getDouble("x"), received_json.getDouble("y"),
+                                    received_json.getInt("color"), received_json.getInt("moveStatus"), received_json.getInt("size"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            Log.d("testtesttest222", String.valueOf(received_json.getInt("color")));
+                            received_drawCL = new Pen(received_json.getDouble("x"), received_json.getDouble("y"),
+                                    received_json.getInt("moveStatus"), received_json.getInt("color"), received_json.getInt("size"));
+                            Log.d("testtesttest", String.valueOf(received_drawCL.color));
+                            paint_tmp.setColor(received_drawCL.color);
+                            paint_tmp.setStrokeWidth(received_drawCL.size);
+                            canvas.drawLine((float) received_prevP.x, (float) received_prevP.y, (float) received_drawCL.x, (float) received_prevP.y, paint_tmp);
+
+                            received_prevP = received_drawCL;
+                            received_prevP = received_drawCL;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }*/
 
 
             });
@@ -249,6 +280,7 @@ public class fragment_draw extends Fragment {
 
         fbClear.setOnClickListener((v)->{
             drawCommandList.clear();
+            received_List.clear();
             drawCanvas.invalidate();
         });
 
@@ -369,37 +401,24 @@ public class fragment_draw extends Fragment {
             Log.d("json Test", "onDraw");
             canvas_tmp = canvas;
             canvas.drawColor(Color.WHITE);
-
+            if (loadDrawImage != null) {
+                canvas.drawBitmap(loadDrawImage, 0, 0, null);
+            }
             if (is_received == 1) {
-                if (received_json.has("first canvas")) {
-                    try {
-                        received_prevP = new Pen(received_json.getDouble("x"), received_json.getDouble("y"),
-                                received_json.getInt("color"), received_json.getInt("moveStatus"), received_json.getInt("size"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        Log.d("testtesttest222", String.valueOf(received_json.getInt("color")));
-                        received_drawCL = new Pen(received_json.getDouble("x"), received_json.getDouble("y"),
-                                received_json.getInt("moveStatus"), received_json.getInt("color"), received_json.getInt("size"));
-                        Log.d("testtesttest", String.valueOf(received_drawCL.color));
-                        paint_tmp.setColor(received_drawCL.color);
-                        paint_tmp.setStrokeWidth(received_drawCL.size);
-                        canvas.drawLine((float) received_prevP.x, (float) received_prevP.y, (float) received_drawCL.x, (float) received_prevP.y, paint_tmp);
+                for (int i = 0; i < received_List.size(); i++) {
+                    Log.d("drawCommandList", String.valueOf(i));
+                    Log.d("drawCommandList", String.valueOf(received_List.get(i)));
+                    fragment_draw.Pen p = received_List.get(i);
+                    paint.setColor(p.color);
+                    paint.setStrokeWidth(p.size);
 
-                        received_prevP = received_drawCL;
-                        received_prevP = received_drawCL;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (p.isMove()) {
+                        fragment_draw.Pen prevP = received_List.get(i - 1);
+                        canvas.drawLine((float) prevP.x, (float) prevP.y, (float) p.x, (float) p.y, paint);
                     }
-
                 }
+                is_received = 0;
             } else {
-                if (loadDrawImage != null) {
-                    canvas.drawBitmap(loadDrawImage, 0, 0, null);
-                }
-
                 for (int i = 0; i < drawCommandList.size(); i++) {
                     Log.d("drawCommandList", String.valueOf(i));
                     Log.d("drawCommandList", String.valueOf(drawCommandList.get(i)));
@@ -433,6 +452,7 @@ public class fragment_draw extends Fragment {
         @Override
         public boolean onTouchEvent(MotionEvent e) {
             cnt++;
+            Log.d("cnt", String.valueOf(cnt));
             int action = e.getAction();
             int state = action == MotionEvent.ACTION_DOWN ? fragment_draw.Pen.STATE_START : fragment_draw.Pen.STATE_MOVE;
             drawCommandList.add(new fragment_draw.Pen(e.getX(), e.getY(), state, color, size));
