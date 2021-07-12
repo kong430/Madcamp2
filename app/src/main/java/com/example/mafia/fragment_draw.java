@@ -124,6 +124,10 @@ public class fragment_draw extends Fragment {
             drawCommandList.clear();
             drawCanvas.invalidate();
         });
+
+        button.setOnClickListener((v)->{
+            //
+        });
     }
 
     /**
