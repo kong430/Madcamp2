@@ -66,8 +66,6 @@ public class fragment_draw extends Fragment {
     private ArrayList<fragment_draw.Pen> received_List = new ArrayList<>();
     View v;
 
-    private Button button;
-
     private WebSocket webSocket;
     private String SERVER_PATH = "ws://192.249.18.146:443";
     //private CanvasAdapter canvasAdapter;
@@ -116,7 +114,6 @@ public class fragment_draw extends Fragment {
         findId();
         canvasContainer.addView(drawCanvas);
 
-        button = v.findViewById(R.id.button);
         initiateSocketConnection();
 
         setOnClickListener();
