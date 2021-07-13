@@ -176,6 +176,12 @@ public class fragment_draw extends Fragment {
                         received_List.clear();
                         drawCanvas.invalidate();
                     }
+
+                    else if (received_json.has("clear")){
+                        drawCommandList.clear();
+                        received_List.clear();
+                        drawCanvas.invalidate();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -200,6 +206,13 @@ public class fragment_draw extends Fragment {
             drawCommandList.clear();
             received_List.clear();
             drawCanvas.invalidate();
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("clear", "1");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            webSocket.send(jsonObject.toString());
         });
 
     }

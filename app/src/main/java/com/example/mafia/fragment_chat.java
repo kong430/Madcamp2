@@ -73,6 +73,7 @@ public class fragment_chat extends Fragment implements TextWatcher {
     private String hidden_word = "";
 
     private CountDownTimer timer;
+    private int scoreView = 0;
 
     public fragment_chat() {
         // Required empty public constructor
@@ -208,7 +209,11 @@ public class fragment_chat extends Fragment implements TextWatcher {
             ((RoomActivity) getContext()).runOnUiThread(() -> {
                 try {
                     JSONObject jsonObject = new JSONObject(text);
-                    if (!jsonObject.has("canvas") && !jsonObject.has("timer")) {
+                    if (jsonObject.has("getPoint")){
+                        scoreView += jsonObject.getInt("points");
+                        score.setText("현재 점수 : " + scoreView);
+                    }
+                    else if (!jsonObject.has("canvas") && !jsonObject.has("timer") && !jsonObject.has("clear")) {
                         if (jsonObject.has("quiz")) {
                             Log.d("The value of 'quiz'", jsonObject.getString("quiz"));
                             if (jsonObject.getString("quiz").equals("true")) {
