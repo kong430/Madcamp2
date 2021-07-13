@@ -1,5 +1,4 @@
 
-
 # 이게모게
 
 > 장진혁, 박민경
@@ -62,4 +61,7 @@
   * 그림을 그리기 위해 터치하는 좌표, paint의 색, 선의 두께를 속성으로 가지는 Pen class를 정의한다.
   * canvas의 drawLine 함수를 호출하여 터치이벤트가 일어날때마다 Pen 타입 리스트에 객체를 추가하며 동시에 canvas에 그림을 그리고, 실시간 공유를 위해 jsonObject로 펜 객체의 속성을 담아 보낸다.
   * 받은 jsonObject를 저장하기 위해 상대방은 새로운 Pen 타입 리스트를 정의하고, 받을 때마다 객체를 추가하여 drawLine 함수가 호출되도록 한다. 
+
+![KakaoTalk_20210714_003748789](https://user-images.githubusercontent.com/86706527/125482331-fdd95a48-d828-4e5e-95c7-85a34034d014.gif)
+![KakaoTalk_20210714_003748789_01](https://user-images.githubusercontent.com/86706527/125482440-3cd288ca-fa85-4c21-b32e-176d9812c1f5.gif)
 
