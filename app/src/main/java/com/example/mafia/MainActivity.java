@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private View loginButton;
     private TextView textView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,12 +82,6 @@ public class MainActivity extends AppCompatActivity {
             public Unit invoke(User user, Throwable throwable) {
                 Log.d("invoke test", "update");
                 if (user != null) {
-                    Log.i(TAG, "invoke: id=" + user.getId());
-                    Log.i(TAG, "invoke: email=" + user.getKakaoAccount().getEmail());
-                    Log.i(TAG, "invoke: nickname=" + user.getKakaoAccount().getProfile().getNickname());
-                    Log.i(TAG, "invoke: gender=" + user.getKakaoAccount().getGender());
-                    Log.i(TAG, "invoke: age=" + user.getKakaoAccount().getAgeRange());
-
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     intent.putExtra("user_id", user.getId());
                     intent.putExtra("user_nickname", user.getKakaoAccount().getProfile().getNickname());

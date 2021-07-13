@@ -129,6 +129,7 @@ public class fragment_chat extends Fragment implements TextWatcher {
         scoreView = v.findViewById(R.id.score);
         otherScoreView = v.findViewById(R.id.otherScore);
 
+        leftTime.setText("남은 시간 : " + 14);
         scoreView.setText("현재 점수 : " + 0);
         otherScoreView.setText("상대 점수 : " + 0);
 
@@ -224,7 +225,7 @@ public class fragment_chat extends Fragment implements TextWatcher {
                         jsonObject1.put("otherScore", score);
                         webSocket.send(jsonObject1.toString());
                     }
-                    else if (!jsonObject.has("canvas") && !jsonObject.has("timer") && !jsonObject.has("clear") && !(jsonObject.has("otherScore"))) {
+                    else if (!jsonObject.has("canvas") && !jsonObject.has("timer") && !jsonObject.has("clear") && !(jsonObject.has("otherScore")) && !(jsonObject.has("full"))) {
                         if (jsonObject.has("quiz")) {
                             Log.d("The value of 'quiz'", jsonObject.getString("quiz"));
                             if (jsonObject.getString("quiz").equals("true")) {

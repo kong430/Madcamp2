@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RoomActivity.class);
+                Intent intent = new Intent(LoginActivity.this, WaitingActivity.class);
                 intent.putExtra("user_nickname", user_nickname);
                 startActivity(intent);
                 //finish();

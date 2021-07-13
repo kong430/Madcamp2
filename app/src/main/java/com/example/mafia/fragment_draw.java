@@ -310,8 +310,10 @@ public class fragment_draw extends Fragment {
                     paint.setStrokeWidth(p.size);
 
                     if (p.isMove()) {
-                        fragment_draw.Pen prevP = received_List.get(i - 1);
-                        canvas.drawLine((float) prevP.x, (float) prevP.y, (float) p.x, (float) p.y, paint);
+                        if (i - 1 >= 0) {
+                            fragment_draw.Pen prevP = received_List.get(i - 1);
+                            canvas.drawLine((float) prevP.x, (float) prevP.y, (float) p.x, (float) p.y, paint);
+                        }
                     }
                 }
                 is_received = 0;
@@ -325,9 +327,10 @@ public class fragment_draw extends Fragment {
 
 
                     if (p.isMove()) {
-                        fragment_draw.Pen prevP = drawCommandList.get(i - 1);
-                        canvas.drawLine((float) prevP.x, (float) prevP.y, (float) p.x, (float) p.y, paint);
-
+                        if (i - 1 >= 0) {
+                            fragment_draw.Pen prevP = drawCommandList.get(i - 1);
+                            canvas.drawLine((float) prevP.x, (float) prevP.y, (float) p.x, (float) p.y, paint);
+                        }
                     }
                 }
             }

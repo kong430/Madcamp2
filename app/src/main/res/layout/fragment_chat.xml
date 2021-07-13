@@ -18,7 +18,7 @@
         android:background="@drawable/edittext_design"
         android:backgroundTint="#4CA9D5"
         android:gravity="center_horizontal"
-        android:text="Text"
+        android:text=""
         android:textColor="#FFFFFF"
         android:textSize="34sp" />
 
