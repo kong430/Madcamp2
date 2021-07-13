@@ -164,11 +164,13 @@ public class fragment_draw extends Fragment {
                 received_json = null;
                 try {
                     received_json = new JSONObject(text);
-                    received_List.add(new Pen(received_json.getDouble("x"), received_json.getDouble("y"),
-                            received_json.getInt("moveStatus"), received_json.getInt("color"),  received_json.getInt("size")));
+                    if (received_json.has("canvas")) {
+                        received_List.add(new Pen(received_json.getDouble("x"), received_json.getDouble("y"),
+                                received_json.getInt("moveStatus"), received_json.getInt("color"), received_json.getInt("size")));
 
-                    is_received = 1;
-                    drawCanvas.invalidate();
+                        is_received = 1;
+                        drawCanvas.invalidate();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -324,9 +326,7 @@ public class fragment_draw extends Fragment {
             JSONObject jsonObject = new JSONObject();
 
             try {
-                if (cnt == 1){
-                    jsonObject.put("first canvas", 1);
-                }
+                jsonObject.put("canvas", "1");
                 jsonObject.put("x", e.getX());
                 jsonObject.put("y", e.getY());
                 jsonObject.put("moveStatus", state);

@@ -87,20 +87,22 @@ public class MessageAdapter extends RecyclerView.Adapter {
         JSONObject message = messages.get(position);
 
         try {
-            if (message.getBoolean("isSent")) {
+            if (!(message.has("canvas"))) {
+                if (message.getBoolean("isSent")) {
 
-                if (message.has("message"))
-                    return TYPE_MESSAGE_SENT;
-                else if (message.has("image"))
-                    return TYPE_IMAGE_SENT;
+                    if (message.has("message"))
+                        return TYPE_MESSAGE_SENT;
+                    else if (message.has("image"))
+                        return TYPE_IMAGE_SENT;
 
-            } else {
+                } else {
 
-                if (message.has("message"))
-                    return TYPE_MESSAGE_RECEIVED;
-                else if (message.has("image"))
-                    return TYPE_IMAGE_RECEIVED;
+                    if (message.has("message"))
+                        return TYPE_MESSAGE_RECEIVED;
+                    else if (message.has("image"))
+                        return TYPE_IMAGE_RECEIVED;
 
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -146,41 +148,43 @@ public class MessageAdapter extends RecyclerView.Adapter {
         JSONObject message = messages.get(position);
 
         try {
-            if (message.getBoolean("isSent")) {
+            if (!(message.has("canvas"))) {
+                if (message.getBoolean("isSent")) {
 
-                if (message.has("message")) {
+                    if (message.has("message")) {
 
-                    SentMessageHolder messageHolder = (SentMessageHolder) holder;
-                    messageHolder.messageTxt.setText(message.getString("message"));
-                    Log.d("message Test sent", message.getString("message"));
+                        SentMessageHolder messageHolder = (SentMessageHolder) holder;
+                        messageHolder.messageTxt.setText(message.getString("message"));
+                        Log.d("message Test sent", message.getString("message"));
 
-                } else {
+                    } else {
 
-                    SentImageHolder imageHolder = (SentImageHolder) holder;
-                    Bitmap bitmap = getBitmapFromString(message.getString("image"));
+                        SentImageHolder imageHolder = (SentImageHolder) holder;
+                        Bitmap bitmap = getBitmapFromString(message.getString("image"));
 
-                    imageHolder.imageView.setImageBitmap(bitmap);
-                }
-
-            } else {
-
-                if (message.has("message")) {
-                    Log.d("message Test received", message.getString("message"));
-                    ReceivedMessageHolder messageHolder = (ReceivedMessageHolder) holder;
-                    messageHolder.nameTxt.setText(message.getString("name"));
-                    messageHolder.messageTxt.setText(message.getString("message"));
-
+                        imageHolder.imageView.setImageBitmap(bitmap);
+                    }
 
                 } else {
 
-                    ReceivedImageHolder imageHolder = (ReceivedImageHolder) holder;
-                    imageHolder.nameTxt.setText(message.getString("name"));
+                    if (message.has("message")) {
+                        Log.d("message Test received", message.getString("message"));
+                        ReceivedMessageHolder messageHolder = (ReceivedMessageHolder) holder;
+                        messageHolder.nameTxt.setText(message.getString("name"));
+                        messageHolder.messageTxt.setText(message.getString("message"));
 
-                    Bitmap bitmap = getBitmapFromString(message.getString("image"));
-                    imageHolder.imageView.setImageBitmap(bitmap);
+
+                    } else {
+
+                        ReceivedImageHolder imageHolder = (ReceivedImageHolder) holder;
+                        imageHolder.nameTxt.setText(message.getString("name"));
+
+                        Bitmap bitmap = getBitmapFromString(message.getString("image"));
+                        imageHolder.imageView.setImageBitmap(bitmap);
+
+                    }
 
                 }
-
             }
         } catch (JSONException e) {
             e.printStackTrace();
