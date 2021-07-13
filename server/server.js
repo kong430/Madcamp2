@@ -9,14 +9,14 @@ var connections = []
 var ans = ""
 var is_full = 0
 var id_list = []
-var word_list = ['PL', '김철환', '매드캠프', '사과', '바나나', '수박', '고양이', '표장욱', '박윤지', '예수님', '피글렛', '농구공', '지갑', '컴퓨터', '티셔츠', '코로나', '시계', '공룡', '닭', '초코송이', '껌', '안경', '휴지', '물병', 
+var word_list = ['PL', '김철환', '박민경dkd', '사과', '바나나', '수박', '고양이', '표장욱', '박윤지', '예수님', '피글렛', '농구공', '지갑', '컴퓨터', '티셔츠', '코로나', '시계', '공룡', '닭', '초코송이', '껌', '안경', '휴지', '물병', 
 '아이언맨', '메로나', '모자', '계란', '주기율표', '헬창', '과로사', '순당무', '딸기우유', '사쿠란보', '나락송', '선풍기', '줌', '콜라', '테슬라', '800층', '비트코인', '도지', '구글', '고니', 
 '서버', '클라', '프론트', '백엔드', '사쿠라네', '육회', '비빔밥', '리엑트', '카톡', '마우스', '할리갈리', '야식', '야근', '출근', '워라벨', '붕괴', '인생', '무상', '카르텔', '나무', '주식']
 const timer = ms => new Promise(res => setTimeout(res, ms))
 async function turn(connections) {
     console.log(connections.length)
     var k = 0
-    for (let j = 0; j < 10; j++){
+    for (let j = 0; j < 2; j++){
         for (let i = 0; i < connections.length; i += 2){
             var myturn = {"quiz": "true", "word": word_list[k]}
             var myturnstring = JSON.stringify(myturn)
@@ -52,6 +52,12 @@ async function turn(connections) {
             k++
         }
     }
+    var finish = {"finish": "true"}
+    var finsihString = JSON.stringify(finish)
+    connections.forEach(element => {
+        element.send(finsihString)
+    })
+
 }
 wsServer.on('request', (req) => {
     const connection = req.accept()
@@ -70,7 +76,7 @@ wsServer.on('request', (req) => {
                 connections = []
                 setTimeout(() => {
                     turn(connections)
-                }, 3000)
+                }, 3500)
             }
         }
 
@@ -100,7 +106,8 @@ wsServer.on('request', (req) => {
 
 
     connection.on('close', (resCode, des) => {
+        connections = []
         console.log('connection closed')
-        connection.splice(connections.indexOf(connection), 1)
+        //connection.splice(connections.indexOf(connection), 1)
     })
 })
