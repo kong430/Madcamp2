@@ -69,11 +69,13 @@ public class fragment_chat extends Fragment implements TextWatcher {
 
     private TextView word;
     private TextView leftTime;
-    private TextView score;
+    private TextView scoreView;
+    private TextView otherScoreView;
     private String hidden_word = "";
 
     private CountDownTimer timer;
-    private int scoreView = 0;
+    private int score = 0;
+    private int otherScore = 0;
 
     public fragment_chat() {
         // Required empty public constructor
@@ -124,9 +126,11 @@ public class fragment_chat extends Fragment implements TextWatcher {
         word = v.findViewById(R.id.word);
 
         leftTime = v.findViewById(R.id.leftTime);
-        score = v.findViewById(R.id.score);
+        scoreView = v.findViewById(R.id.score);
+        otherScoreView = v.findViewById(R.id.otherScore);
 
-        score.setText("현재 점수 : " + 0);
+        scoreView.setText("현재 점수 : " + 0);
+        otherScoreView.setText("상대 점수 : " + 0);
 
         timer = new CountDownTimer(15000, 1000) {
             @Override
@@ -209,11 +213,18 @@ public class fragment_chat extends Fragment implements TextWatcher {
             ((RoomActivity) getContext()).runOnUiThread(() -> {
                 try {
                     JSONObject jsonObject = new JSONObject(text);
-                    if (jsonObject.has("getPoint")){
-                        scoreView += jsonObject.getInt("points");
-                        score.setText("현재 점수 : " + scoreView);
+                    if (jsonObject.has("otherScore")){
+                        otherScore = jsonObject.getInt("otherScore");
+                        otherScoreView.setText("상대 점수 : " + otherScore);
                     }
-                    else if (!jsonObject.has("canvas") && !jsonObject.has("timer") && !jsonObject.has("clear")) {
+                    if (jsonObject.has("getPoint")){
+                        score += jsonObject.getInt("points");
+                        scoreView.setText("현재 점수 : " + score);
+                        JSONObject jsonObject1 = new JSONObject();
+                        jsonObject1.put("otherScore", score);
+                        webSocket.send(jsonObject1.toString());
+                    }
+                    else if (!jsonObject.has("canvas") && !jsonObject.has("timer") && !jsonObject.has("clear") && !(jsonObject.has("otherScore"))) {
                         if (jsonObject.has("quiz")) {
                             Log.d("The value of 'quiz'", jsonObject.getString("quiz"));
                             if (jsonObject.getString("quiz").equals("true")) {
