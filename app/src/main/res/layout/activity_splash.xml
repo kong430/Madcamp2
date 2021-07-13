@@ -24,7 +24,7 @@
         android:id="@+id/imageView2"
         android:layout_width="329dp"
         android:layout_height="248dp"
-        android:tint="#0B4A7C"
+        android:tint="#3C5F6E"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
