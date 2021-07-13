@@ -30,7 +30,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+<<<<<<< HEAD
         app:layout_constraintVertical_bias="0.754" />
+=======
+        app:layout_constraintVertical_bias="0.715" />
+
+    <ImageView
+        android:id="@+id/profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.205"
+        tools:srcCompat="@tools:sample/avatars" />
+>>>>>>> 4a6059a7411cd7629b6df2c8d45907d5fe910873
 
     <TextView
         android:id="@+id/nickname"
@@ -44,6 +60,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+<<<<<<< HEAD
         app:layout_constraintVertical_bias="0.431" />
 
     <ImageView
@@ -57,4 +74,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
+=======
+        app:layout_constraintVertical_bias="0.392" />
+>>>>>>> 4a6059a7411cd7629b6df2c8d45907d5fe910873
 </androidx.constraintlayout.widget.ConstraintLayout>
