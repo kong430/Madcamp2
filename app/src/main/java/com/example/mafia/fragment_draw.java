@@ -67,7 +67,7 @@ public class fragment_draw extends Fragment {
     View v;
 
     private WebSocket webSocket;
-    private String SERVER_PATH = "ws://192.249.18.146:443";
+    private String SERVER_PATH = "ws://192.249.18.102:443";
     //private CanvasAdapter canvasAdapter;
     static Canvas canvas_tmp;
     static Paint paint_tmp = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -160,7 +160,6 @@ public class fragment_draw extends Fragment {
         public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
             super.onMessage(webSocket, text);
             ((RoomActivity) getContext()).runOnUiThread(() -> {
-                Log.d("testtest", text);
                 received_json = null;
                 try {
                     received_json = new JSONObject(text);
@@ -169,6 +168,12 @@ public class fragment_draw extends Fragment {
                                 received_json.getInt("moveStatus"), received_json.getInt("color"), received_json.getInt("size")));
 
                         is_received = 1;
+                        drawCanvas.invalidate();
+                    }
+
+                    else if (received_json.has("timer")){
+                        drawCommandList.clear();
+                        received_List.clear();
                         drawCanvas.invalidate();
                     }
                 } catch (JSONException e) {

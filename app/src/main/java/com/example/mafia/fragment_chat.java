@@ -59,7 +59,7 @@ public class fragment_chat extends Fragment implements TextWatcher {
 
     private String name;
     private WebSocket webSocket;
-    private String SERVER_PATH = "ws://192.249.18.146:443";
+    private String SERVER_PATH = "ws://192.249.18.102:443";
     private EditText messageEdit;
     private View sendBtn, pickImgBtn;
     private RecyclerView recyclerView;
@@ -71,6 +71,8 @@ public class fragment_chat extends Fragment implements TextWatcher {
     private TextView leftTime;
     private TextView score;
     private String hidden_word = "";
+
+    private CountDownTimer timer;
 
     public fragment_chat() {
         // Required empty public constructor
@@ -125,7 +127,7 @@ public class fragment_chat extends Fragment implements TextWatcher {
 
         score.setText("현재 점수 : " + 0);
 
-        CountDownTimer timer = new CountDownTimer(30000, 1000) {
+        timer = new CountDownTimer(15000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 leftTime.setText("남은 시간 : " + (int) (millisUntilFinished/1000));
@@ -135,7 +137,6 @@ public class fragment_chat extends Fragment implements TextWatcher {
             public void onFinish() {
             }
         };
-        timer.start();
 
 
         return v;
@@ -207,7 +208,7 @@ public class fragment_chat extends Fragment implements TextWatcher {
             ((RoomActivity) getContext()).runOnUiThread(() -> {
                 try {
                     JSONObject jsonObject = new JSONObject(text);
-                    if (!jsonObject.has("canvas")) {
+                    if (!jsonObject.has("canvas") && !jsonObject.has("timer")) {
                         if (jsonObject.has("quiz")) {
                             Log.d("The value of 'quiz'", jsonObject.getString("quiz"));
                             if (jsonObject.getString("quiz").equals("true")) {
@@ -225,6 +226,9 @@ public class fragment_chat extends Fragment implements TextWatcher {
 
                             recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
                         }
+                    }
+                    else if (jsonObject.has("timer")){
+                        timer.start();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

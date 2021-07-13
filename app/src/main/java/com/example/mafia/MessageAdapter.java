@@ -87,7 +87,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
         JSONObject message = messages.get(position);
 
         try {
-            if (!(message.has("canvas"))) {
+            if (!(message.has("canvas")) && !(message.has("timer"))) {
                 if (message.getBoolean("isSent")) {
 
                     if (message.has("message"))
