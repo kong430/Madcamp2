@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.kakao.sdk.auth.LoginClient;
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApi;
@@ -44,9 +46,15 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Long user_id = intent.getLongExtra("user_id", 0);
         user_nickname = intent.getStringExtra("user_nickname");
-        Uri user_profile = intent.getParcelableExtra("user_image");
+        Uri user_profile = Uri.parse(intent.getStringExtra("user_image"));
 
         nickName.setText(user_nickname);
+        //Glide.with(this).load(user_profile).into(profileImage);
+        //Glide.with(this).load(user_profile).apply(new
+        //        RequestOptions()
+        //                .skipMemoryCache(true)
+        //                .diskCacheStrategy(DiskCacheStrategy.NONE)
+        //).into(profileImage);
         Glide.with(profileImage).load(user_profile).circleCrop().into(profileImage);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {

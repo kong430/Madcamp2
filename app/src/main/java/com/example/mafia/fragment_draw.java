@@ -1,32 +1,34 @@
 package com.example.mafia;
 
 import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
+import okhttp3.Response;
 import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,10 +61,10 @@ public class fragment_draw extends Fragment {
     private ConstraintLayout canvasContainer;       //캔버스 root view
 
     private ArrayList<fragment_draw.Pen> drawCommandList;         //그리기 경로 기록
+    private ArrayList<fragment_draw.Pen> received_List = new ArrayList<>();
+
     View v;
 
-    private WebSocket webSocket;
-    private String SERVER_PATH = "ws://192.249.18.146:443";
     //private CanvasAdapter canvasAdapter;
     static Canvas canvas_tmp;
     static Paint paint_tmp = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -184,12 +186,12 @@ public class fragment_draw extends Fragment {
     class Pen {
         public static final int STATE_START = 0;        //펜의 상태(움직임 시작)
         public static final int STATE_MOVE = 1;         //펜의 상태(움직이는 중)
-        float x, y;                                     //펜의 좌표
+        double x, y;                                     //펜의 좌표
         int moveStatus;                                 //현재 움직임 여부
         int color;                                      //펜 색
         int size;                                       //펜 두께
 
-        public Pen(float x, float y, int moveStatus, int color, int size) {
+        public Pen(double x, double y, int moveStatus, int color, int size) {
             this.x = x;
             this.y = y;
             this.moveStatus = moveStatus;
