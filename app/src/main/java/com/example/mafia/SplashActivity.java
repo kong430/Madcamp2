@@ -2,6 +2,7 @@ package com.example.mafia;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,14 +10,19 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //어플리케이션 본격적인 구동 전 하려는 작업을 작성(DB 등 리소스 로드라던지)
-        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-        startActivity(intent);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        setContentView(R.layout.activity_splash);
+
+        Handler hd = new Handler();
+        hd.postDelayed(new splashhandler(), 2000); // 1초 후에 hd handler 실행  3000ms = 3초
+    }
+    private class splashhandler implements Runnable{
+        public void run(){
+            startActivity(new Intent(getApplication(), MainActivity.class)); //로딩이 끝난 후, ChoiceFunction 이동
+            SplashActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
         }
-        finish();
+    }
+    @Override
+    public void onBackPressed() {
+        //초반 플래시 화면에서 넘어갈때 뒤로가기 버튼 못누르게 함
     }
 }
