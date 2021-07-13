@@ -18,11 +18,7 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".UsernameActivity" />
 
@@ -37,6 +33,7 @@
                     android:scheme="kakao568f763dc4b54f15600e9ab5eb265ce5" />
             </intent-filter>
         </activity>
+
         <activity android:name=".LoginActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".DrawActivity"
@@ -48,6 +45,14 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

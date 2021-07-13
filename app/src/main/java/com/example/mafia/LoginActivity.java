@@ -44,10 +44,10 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Long user_id = intent.getLongExtra("user_id", 0);
         user_nickname = intent.getStringExtra("user_nickname");
-        //Uri user_profile = intent.getParcelableExtra("user_image");
+        Uri user_profile = intent.getParcelableExtra("user_image");
 
         nickName.setText(user_nickname);
-        //Glide.with(profileImage).load(user_profile).circleCrop().into(profileImage);
+        Glide.with(profileImage).load(user_profile).circleCrop().into(profileImage);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
 

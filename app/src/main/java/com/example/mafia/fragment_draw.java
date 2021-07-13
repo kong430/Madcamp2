@@ -61,7 +61,17 @@ public class fragment_draw extends Fragment {
     private ArrayList<fragment_draw.Pen> drawCommandList;         //그리기 경로 기록
     View v;
 
-    private Button button;
+    private WebSocket webSocket;
+    private String SERVER_PATH = "ws://192.249.18.146:443";
+    //private CanvasAdapter canvasAdapter;
+    static Canvas canvas_tmp;
+    static Paint paint_tmp = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    static Pen received_drawCL = null;
+    static Pen received_prevP = null;
+    static int cnt = 0;
+    static int is_received = 0;
+    static JSONObject received_json;
 
     /**
      * Use this factory method to create a new instance of
@@ -98,7 +108,6 @@ public class fragment_draw extends Fragment {
         findId();
         canvasContainer.addView(drawCanvas);
 
-        button = v.findViewById(R.id.button);
         initiateSocketConnection();
         setOnClickListener();
         
@@ -116,10 +125,47 @@ public class fragment_draw extends Fragment {
         drawCanvas = new DrawCanvas(this);
     }
 
-    /**
-     * jhChoi - 201124
-     * OnClickListener Setting
-     */
+    private class SocketListener extends WebSocketListener {
+
+        @Override
+        public void onOpen(WebSocket webSocket, Response response){
+            super.onOpen(webSocket, response);
+
+            ((RoomActivity) getContext()).runOnUiThread(() -> {
+                Toast.makeText(getActivity(),
+                        "Socket Connection Successful!",
+                        Toast.LENGTH_SHORT).show();
+
+                initializeView();
+            });
+
+        }
+
+
+        @Override
+        public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
+            super.onMessage(webSocket, text);
+            ((RoomActivity) getContext()).runOnUiThread(() -> {
+                Log.d("testtest", text);
+                received_json = null;
+                try {
+                    received_json = new JSONObject(text);
+                    received_List.add(new Pen(received_json.getDouble("x"), received_json.getDouble("y"),
+                            received_json.getInt("moveStatus"), received_json.getInt("color"),  received_json.getInt("size")));
+
+                    is_received = 1;
+                    drawCanvas.invalidate();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+    }
+
+    private void initializeView() {
+    }
+
     private void setOnClickListener() {
         fbPen.setOnClickListener((v)->{
             drawCanvas.changeTool(fragment_draw.DrawCanvas.MODE_PEN);
@@ -133,16 +179,8 @@ public class fragment_draw extends Fragment {
             drawCommandList.clear();
             drawCanvas.invalidate();
         });
-
-        button.setOnClickListener((v)->{
-            //
-        });
     }
 
-    /**
-     * jhChoi - 201124
-     * Pen을 표현할 class입니다.
-     */
     class Pen {
         public static final int STATE_START = 0;        //펜의 상태(움직임 시작)
         public static final int STATE_MOVE = 1;         //펜의 상태(움직이는 중)
@@ -159,19 +197,12 @@ public class fragment_draw extends Fragment {
             this.size = size;
         }
 
-        /**
-         * jhChoi - 201124
-         * 현재 pen의 상태가 움직이는 상태인지 반환합니다.
-         */
         public boolean isMove() {
             return moveStatus == STATE_MOVE;
         }
     }
 
-    /**
-     * jhChoi - 201124
-     * 그림이 그려질 canvas view
-     */
+
     class DrawCanvas extends View {
         public static final int MODE_PEN = 1;                     //모드 (펜)
         public static final int MODE_ERASER = 0;                  //모드 (지우개)
@@ -198,10 +229,7 @@ public class fragment_draw extends Fragment {
             init();
         }
 
-        /**
-         * jhChoi - 201124
-         * 그리기에 필요한 요소를 초기화 합니다.
-         */
+
         private void init() {
             paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             drawCommandList = new ArrayList<>();
@@ -210,10 +238,6 @@ public class fragment_draw extends Fragment {
             size = PEN_SIZE;
         }
 
-        /**
-         * jhChoi - 201124
-         * 현재까지 그린 그림을 Bitmap으로 반환합니다.
-         */
         public Bitmap getCurrentCanvas() {
             Bitmap bitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
@@ -221,10 +245,6 @@ public class fragment_draw extends Fragment {
             return bitmap;
         }
 
-        /**
-         * jhChoi - 201124
-         * Tool type을 (펜 or 지우개)로 변경합니다.
-         * */
         private void changeTool(int toolMode) {
             if (toolMode == MODE_PEN) {
                 this.color = Color.BLACK;
@@ -243,15 +263,35 @@ public class fragment_draw extends Fragment {
             if (loadDrawImage != null) {
                 canvas.drawBitmap(loadDrawImage, 0, 0, null);
             }
+          
+            if (is_received == 1) {
+                for (int i = 0; i < received_List.size(); i++) {
+                    Log.d("drawCommandList", String.valueOf(i));
+                    Log.d("drawCommandList", String.valueOf(received_List.get(i)));
+                    fragment_draw.Pen p = received_List.get(i);
+                    paint.setColor(p.color);
+                    paint.setStrokeWidth(p.size);
 
-            for (int i = 0; i < drawCommandList.size(); i++) {
-                fragment_draw.Pen p = drawCommandList.get(i);
-                paint.setColor(p.color);
-                paint.setStrokeWidth(p.size);
+                    if (p.isMove()) {
+                        fragment_draw.Pen prevP = received_List.get(i - 1);
+                        canvas.drawLine((float) prevP.x, (float) prevP.y, (float) p.x, (float) p.y, paint);
+                    }
+                }
+                is_received = 0;
+            } else {
+                for (int i = 0; i < drawCommandList.size(); i++) {
+                    Log.d("drawCommandList", String.valueOf(i));
+                    Log.d("drawCommandList", String.valueOf(drawCommandList.get(i)));
+                    fragment_draw.Pen p = drawCommandList.get(i);
+                    paint.setColor(p.color);
+                    paint.setStrokeWidth(p.size);
 
-                if (p.isMove()) {
-                    fragment_draw.Pen prevP = drawCommandList.get(i - 1);
-                    canvas.drawLine(prevP.x, prevP.y, p.x, p.y, paint);
+
+                    if (p.isMove()) {
+                        fragment_draw.Pen prevP = drawCommandList.get(i - 1);
+                        canvas.drawLine((float) prevP.x, (float) prevP.y, (float) p.x, (float) p.y, paint);
+
+                    }
                 }
             }
         }
