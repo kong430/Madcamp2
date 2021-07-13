@@ -1,39 +1,32 @@
 package com.example.mafia;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +34,10 @@ import okhttp3.WebSocketListener;
  * create an instance of this fragment.
  */
 public class fragment_draw extends Fragment {
-
+    //TODO: create a websocket to connect to server
+    private WebSocket webSocket;
+    private String SERVER_PATH = "ws://192.249.18.146:443";
+    
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -63,7 +59,6 @@ public class fragment_draw extends Fragment {
     private ConstraintLayout canvasContainer;       //캔버스 root view
 
     private ArrayList<fragment_draw.Pen> drawCommandList;         //그리기 경로 기록
-    private ArrayList<fragment_draw.Pen> received_List = new ArrayList<>();
     View v;
 
     private WebSocket webSocket;
@@ -77,7 +72,6 @@ public class fragment_draw extends Fragment {
     static int cnt = 0;
     static int is_received = 0;
     static JSONObject received_json;
-
 
     /**
      * Use this factory method to create a new instance of
@@ -115,20 +109,12 @@ public class fragment_draw extends Fragment {
         canvasContainer.addView(drawCanvas);
 
         initiateSocketConnection();
-
         setOnClickListener();
-
+        
         return v;
     }
 
     private void initiateSocketConnection() {
-
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(SERVER_PATH).build();
-        Log.d("request", String.valueOf(request));
-        webSocket = client.newWebSocket(request, new fragment_draw.SocketListener());
-        Log.d("request...", String.valueOf(webSocket));
-
     }
 
     private void findId() {
@@ -191,21 +177,19 @@ public class fragment_draw extends Fragment {
 
         fbClear.setOnClickListener((v)->{
             drawCommandList.clear();
-            received_List.clear();
             drawCanvas.invalidate();
         });
-
     }
 
     class Pen {
         public static final int STATE_START = 0;        //펜의 상태(움직임 시작)
         public static final int STATE_MOVE = 1;         //펜의 상태(움직이는 중)
-        double x, y;                                     //펜의 좌표
+        float x, y;                                     //펜의 좌표
         int moveStatus;                                 //현재 움직임 여부
         int color;                                      //펜 색
         int size;                                       //펜 두께
 
-        public Pen(double x, double y, int moveStatus, int color, int size) {
+        public Pen(float x, float y, int moveStatus, int color, int size) {
             this.x = x;
             this.y = y;
             this.moveStatus = moveStatus;
@@ -261,7 +245,6 @@ public class fragment_draw extends Fragment {
             return bitmap;
         }
 
-
         private void changeTool(int toolMode) {
             if (toolMode == MODE_PEN) {
                 this.color = Color.BLACK;
@@ -275,12 +258,12 @@ public class fragment_draw extends Fragment {
 
         @Override
         protected void onDraw(Canvas canvas) {
-            Log.d("json Test", "onDraw");
-            canvas_tmp = canvas;
             canvas.drawColor(Color.WHITE);
+
             if (loadDrawImage != null) {
                 canvas.drawBitmap(loadDrawImage, 0, 0, null);
             }
+          
             if (is_received == 1) {
                 for (int i = 0; i < received_List.size(); i++) {
                     Log.d("drawCommandList", String.valueOf(i));
@@ -315,49 +298,11 @@ public class fragment_draw extends Fragment {
 
         @Override
         public boolean onTouchEvent(MotionEvent e) {
-            cnt++;
-            Log.d("cnt", String.valueOf(cnt));
             int action = e.getAction();
             int state = action == MotionEvent.ACTION_DOWN ? fragment_draw.Pen.STATE_START : fragment_draw.Pen.STATE_MOVE;
             drawCommandList.add(new fragment_draw.Pen(e.getX(), e.getY(), state, color, size));
-
-            JSONObject jsonObject = new JSONObject();
-
-            try {
-                if (cnt == 1){
-                    jsonObject.put("first canvas", 1);
-                }
-                jsonObject.put("x", e.getX());
-                jsonObject.put("y", e.getY());
-                jsonObject.put("moveStatus", state);
-                jsonObject.put("color", color);
-                jsonObject.put("size", size);
-            } catch (JSONException jsonException) {
-                jsonException.printStackTrace();
-            }
-            webSocket.send(jsonObject.toString());
-
             invalidate();
             return true;
         }
-    }
-
-    public static Bitmap StringToBitmap(String encodedString) {
-        try {
-            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch (Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
-
-    public static String BitmapToString(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
-        byte[] bytes = baos.toByteArray();
-        String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
-        return temp;
     }
 }

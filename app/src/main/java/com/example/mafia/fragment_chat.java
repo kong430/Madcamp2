@@ -24,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,7 +37,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
-
 
 import static android.app.Activity.RESULT_OK;
 import static androidx.core.content.ContextCompat.getSystemService;
@@ -59,7 +59,7 @@ public class fragment_chat extends Fragment implements TextWatcher {
 
     private String name;
     private WebSocket webSocket;
-    private String SERVER_PATH = "ws://192.249.18.146:443";
+    private String SERVER_PATH = "ws://192.249.18.102:80";
     private EditText messageEdit;
     private View sendBtn, pickImgBtn;
     private RecyclerView recyclerView;
@@ -70,6 +70,7 @@ public class fragment_chat extends Fragment implements TextWatcher {
     private TextView word;
     private TextView leftTime;
     private TextView score;
+    private String hidden_word = "";
 
     public fragment_chat() {
         // Required empty public constructor
@@ -118,6 +119,7 @@ public class fragment_chat extends Fragment implements TextWatcher {
         initiateSocketConnection();
 
         word = v.findViewById(R.id.word);
+
         leftTime = v.findViewById(R.id.leftTime);
         score = v.findViewById(R.id.score);
 
@@ -143,9 +145,7 @@ public class fragment_chat extends Fragment implements TextWatcher {
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(SERVER_PATH).build();
-        Log.d("request", String.valueOf(request));
         webSocket = client.newWebSocket(request, new SocketListener());
-        Log.d("request...", String.valueOf(webSocket));
 
     }
 
@@ -200,24 +200,37 @@ public class fragment_chat extends Fragment implements TextWatcher {
 
         }
 
-
         @Override
         public void onMessage(WebSocket webSocket, String text){
             super.onMessage(webSocket, text);
+
             ((RoomActivity) getContext()).runOnUiThread(() -> {
                 try {
-                    Log.d("messagetest", text);
                     JSONObject jsonObject = new JSONObject(text);
-                    jsonObject.put("isSent", false);
-                    Log.d("isSent", "ok");
-                    if (jsonObject.has("message")) messageAdapter.addItem(jsonObject);
+                    if (jsonObject.has("quiz")) {
+                        Log.d("The value of 'quiz'", jsonObject.getString("quiz"));
+                        if (jsonObject.getString("quiz").equals("true")){
+                            word.setText(jsonObject.getString("word"));
+                            Log.d("The value of 'word'", String.valueOf(word));
+                        }
+                        else {
+                            hidden_word = jsonObject.getString("word");
+                            Log.d("The value of 'hidden_word'", hidden_word);
+                        }
+                    }
+                    else {
+                        jsonObject.put("isSent", false);
+                        Log.d("isSent", "ok");
 
+                        messageAdapter.addItem(jsonObject);
+
+                        recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             });
         }
-
     }
 
     private void initializeView() {
@@ -240,6 +253,11 @@ public class fragment_chat extends Fragment implements TextWatcher {
             try {
                 jsonObject.put("name", name);
                 jsonObject.put("message", messageEdit.getText().toString());
+
+                if (hidden_word.equals(messageEdit.getText().toString())){
+                    Log.d("Sent hidden word",hidden_word);
+                    jsonObject.put("rightans", "true");
+                }
 
                 webSocket.send(jsonObject.toString());
 
