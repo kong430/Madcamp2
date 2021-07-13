@@ -182,6 +182,7 @@ public class fragment_draw extends Fragment {
                         received_List.clear();
                         drawCanvas.invalidate();
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

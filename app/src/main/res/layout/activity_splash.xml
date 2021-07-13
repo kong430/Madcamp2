@@ -75,11 +75,12 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="207dp"
-        android:layout_height="60dp"
+        android:layout_width="288dp"
+        android:layout_height="57dp"
         android:layout_marginBottom="176dp"
         android:fontFamily="@font/font1"
         android:text="이게모게"
+        android:gravity="center_horizontal"
         android:textColor="#042037"
         android:textSize="50sp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"

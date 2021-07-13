@@ -214,18 +214,29 @@ public class fragment_chat extends Fragment implements TextWatcher {
             ((RoomActivity) getContext()).runOnUiThread(() -> {
                 try {
                     JSONObject jsonObject = new JSONObject(text);
-                    if (jsonObject.has("otherScore")){
+                    if (jsonObject.has("finish")){
+                        //Thread.sleep(2000);
+                        if (otherScore == score) Toast.makeText(getContext(), "비겼습니다!!!", Toast.LENGTH_LONG).show();
+                        else if (otherScore < score) Toast.makeText(getContext(), "이겼습니다!!!!!^0^", Toast.LENGTH_LONG).show();
+                        else Toast.makeText(getContext(), "졌습니다....ㅠㅠ", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        Thread.sleep(3000);
+                        startActivity(intent);
+                    }
+                    else if (jsonObject.has("otherScore")){
                         otherScore = jsonObject.getInt("otherScore");
                         otherScoreView.setText("상대 점수 : " + otherScore);
                     }
-                    if (jsonObject.has("getPoint")){
+                    else if (jsonObject.has("getPoint")){
+                        Toast.makeText(getActivity(), "정답을 맞췄습니다!", Toast.LENGTH_SHORT).show();
                         score += jsonObject.getInt("points");
                         scoreView.setText("현재 점수 : " + score);
                         JSONObject jsonObject1 = new JSONObject();
                         jsonObject1.put("otherScore", score);
                         webSocket.send(jsonObject1.toString());
                     }
-                    else if (!jsonObject.has("canvas") && !jsonObject.has("timer") && !jsonObject.has("clear") && !(jsonObject.has("otherScore")) && !(jsonObject.has("full"))) {
+                    else if (!jsonObject.has("canvas") && !jsonObject.has("timer") && !jsonObject.has("clear")
+                            && !(jsonObject.has("full")) && !(jsonObject.has("finish"))) {
                         if (jsonObject.has("quiz")) {
                             Log.d("The value of 'quiz'", jsonObject.getString("quiz"));
                             if (jsonObject.getString("quiz").equals("true")) {
@@ -248,6 +259,8 @@ public class fragment_chat extends Fragment implements TextWatcher {
                         timer.start();
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             });

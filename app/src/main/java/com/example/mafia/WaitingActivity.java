@@ -65,6 +65,10 @@ public class WaitingActivity extends AppCompatActivity {
                 received_json = null;
                 try {
                     received_json = new JSONObject(text);
+                    if (received_json.has("finish")){
+                        //Thread.sleep(3000);
+                        //finishActivity(1);
+                    }
                     if (received_json.has("full")){
                         Intent intent = new Intent(WaitingActivity.this, RoomActivity.class);
 
@@ -75,7 +79,7 @@ public class WaitingActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         webSocket.send(jsonObject.toString());
-                        Thread.sleep(2000);
+                        Thread.sleep(3000);
                         startActivity(intent);
                         finish();
                     }
