@@ -18,25 +18,22 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".UsernameActivity" />
 
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
+            <intent-filter>5
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
                 <data android:host="oauth"
-                    android:scheme="kakao1229bfdf3e10dc4b4697212ab143c194" />
+                    android:scheme="kakao568f763dc4b54f15600e9ab5eb265ce5" />
             </intent-filter>
         </activity>
+
         <activity android:name=".LoginActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".DrawActivity"
@@ -48,6 +45,14 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
