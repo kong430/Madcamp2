@@ -2,13 +2,13 @@
 
 # ContactsGalleryAndRain
 
-> 김윤재, 박민경
+> 장진혁, 박민경
 
 
 
 ### Overview
 
-> contacts, gallery, rain_notification 기능을 담은 어플리케이션이다.
+> 채팅 기능, 그림 공유가 가능한 어플리케이션이다. 턴재로 진행되는 게임이며, 상대방이 그린 그림을 맞추면 된다. 
 
 
 
@@ -16,11 +16,12 @@
 
 * Android Studio 4.2.1
 * SDK Platforms: Android 11.0 - API Level: 30
-* Language : JAVA
+* Language : JAVA, JavaScript
+* Node.js : 16.4.2
 
 
 
-### Main
+### Login
 
 > 3개의 탭 <Contacts, Gallery, Rain_notification> 을 가진다.
 
@@ -31,7 +32,7 @@
   
 
 
-### Tab1: Contacts
+### Waiting
 
 > 연락처를 보여주는 탭으로 연락처 검색, 추가, 전화를 할 수 있다.
 
